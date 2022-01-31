@@ -1,0 +1,27 @@
+---------------
+    Deposit
+---------------
+deposit 1 without balance
+deposit 1 with balance
+deposit 1 twice
+deposit 0 -> expected failure
+deposit minus 1 -> expected failure
+
+-----------------
+    Withdrawal
+-----------------
+
+withdrawal 1 with a balance of 1
+withdrawal 1 without balance -> expected failure
+withdrawal 1 without balance and with allow overdraft of 1
+    -> allow overdraft
+withdrawal 1 with negative balance -> expected failure
+withdrawal 1 with negative balance and with allow overdraft of 1
+withdrawal 1 twice
+withdrawal 0 -> expected failure
+withdrawal minus 1 -> expected failure
+
+-------------------------------------
+    Account Statement and historic
+-------------------------------------
+
