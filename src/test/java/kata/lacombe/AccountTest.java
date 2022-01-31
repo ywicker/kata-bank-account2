@@ -1,11 +1,16 @@
 package kata.lacombe;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountTest {
     @Test
-    void init_test() {
-        Assertions.assertThat(false).isFalse();
+    void deposit_1_without_balance() {
+        Account account = new Account();
+
+        account.deposit(1);
+
+        assertThat(account.getBalance()).isEqualTo(1);
     }
 }
