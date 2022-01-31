@@ -1,11 +1,12 @@
-package kata.lacombe;
+package kata.lacombe.account;
 
+import kata.lacombe.Account;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class AccountTest {
+public class DepositTest {
     @Test
     void deposit_1_without_balance() {
         Account account = new Account();
