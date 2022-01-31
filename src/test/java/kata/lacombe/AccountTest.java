@@ -38,4 +38,11 @@ public class AccountTest {
         assertThatThrownBy(() -> account.deposit(0))
                 .isInstanceOf(AssertionError.class);
     }
+    @Test
+    void deposit_minus_1() {
+        Account account = new Account();
+
+        assertThatThrownBy(() -> account.deposit(-1))
+                .isInstanceOf(AssertionError.class);
+    }
 }

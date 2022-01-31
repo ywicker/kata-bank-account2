@@ -11,7 +11,7 @@ public class Account {
     }
 
     public void deposit(int amount) {
-        assert amount != 0;
+        assert Integer.signum(amount) ==1;
         balance += amount;
     }
 
