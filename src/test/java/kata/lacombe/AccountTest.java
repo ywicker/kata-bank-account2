@@ -31,4 +31,11 @@ public class AccountTest {
 
         assertThat(account.getBalance()).isEqualTo(2);
     }
+    @Test
+    void deposit_0() {
+        Account account = new Account();
+
+        assertThatThrownBy(() -> account.deposit(0))
+                .isInstanceOf(AssertionError.class);
+    }
 }

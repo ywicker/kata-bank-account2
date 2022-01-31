@@ -11,6 +11,7 @@ public class Account {
     }
 
     public void deposit(int amount) {
+        assert amount != 0;
         balance += amount;
     }
 
