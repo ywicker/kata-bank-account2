@@ -16,15 +16,15 @@ public class Account {
         this.allowOverdraft = allowOverdraft;
     }
 
-    public void deposit(final int amount) {
-        assert Integer.signum(amount) == 1;
-        balance += amount;
+    public void deposit(final int value) {
+        Amount amount = Amount.createAmount(value);
+        balance += amount.getValue();
     }
 
-    public void withdrawal(final int amount) {
-        assert Integer.signum(amount) == 1;
-        assert Integer.signum(balance + allowOverdraft - amount) >= 0;
-        balance -= amount;
+    public void withdrawal(final int value) {
+        Amount amount = Amount.createAmount(value);
+        assert Integer.signum(balance + allowOverdraft - amount.getValue()) >= 0;
+        balance -= amount.getValue();
     }
 
     public int getBalance() {
