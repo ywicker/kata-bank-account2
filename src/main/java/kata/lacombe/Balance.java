@@ -20,7 +20,7 @@ public class Balance {
     }
 
     public void subtract(Amount amount) {
-        assert Integer.signum(balanceValue + allowOverdraft - amount.getValue()) != -1;
+        assert Integer.signum(balanceValue + allowOverdraft - amount.value()) != -1;
         balanceValue -= amount.value();
     }
 

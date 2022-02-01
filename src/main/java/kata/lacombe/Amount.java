@@ -6,8 +6,4 @@ public record Amount(int value) {
         assert Integer.signum(value) == 1;
         return new Amount(value);
     }
-
-    public int getValue() {
-        return value;
-    }
 }
