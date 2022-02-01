@@ -23,7 +23,7 @@ public class Account {
     public void withdrawal(final int value) {
         Amount amount = Amount.createAmount(value);
         // assert Integer.signum(balance + allowOverdraft - amount.getValue()) >= 0;
-        balance.substract(amount);
+        balance.subtract(amount);
     }
 
     public int getBalance() {
