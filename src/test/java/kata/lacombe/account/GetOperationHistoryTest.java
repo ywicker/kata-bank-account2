@@ -1,14 +1,23 @@
 package kata.lacombe.account;
 
 import kata.lacombe.Account;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetOperationHistoryTest {
     @Test
     void an_initialized_account_should_make_no_history() {
         Account account = new Account();
 
-        Assertions.assertThat(account.getOperationHistory()).isEmpty();
+        assertThat(account.getOperationHistory()).isEmpty();
+    }
+    @Test
+    void depositing_once_should_make_a_history_with_one_operation() {
+        Account account = new Account();
+
+        account.deposit(1);
+
+        assertThat(account.getOperationHistory()).hasSize(1);
     }
 }
