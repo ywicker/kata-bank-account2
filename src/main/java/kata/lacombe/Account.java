@@ -3,6 +3,9 @@ package kata.lacombe;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kata.lacombe.OperationType.DEPOSIT;
+import static kata.lacombe.OperationType.WITHDRAWAL;
+
 public class Account {
     private final Balance balance;
     private final List<Operation> operationList;
@@ -24,13 +27,13 @@ public class Account {
 
     public void deposit(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation());
+        operationList.add(new Operation(DEPOSIT));
         balance.add(amount);
     }
 
     public void withdrawal(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation());
+        operationList.add(new Operation(WITHDRAWAL));
         balance.subtract(amount);
     }
 

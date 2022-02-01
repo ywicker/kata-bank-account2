@@ -1,4 +1,4 @@
 package kata.lacombe;
 
-public class Operation {
+public record Operation(OperationType type) {
 }
