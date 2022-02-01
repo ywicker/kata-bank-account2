@@ -16,7 +16,7 @@ withdrawal 1 without balance -> expected failure
 withdrawal 1 without balance and with allow overdraft of 1
     -> allow overdraft
 withdrawal 1 with negative balance -> expected failure
-withdrawal 1 with negative balance and with allow overdraft of 1
+withdrawal 1 with negative balance and with allow overdraft of 2
 withdrawal 1 twice
 withdrawal 0 -> expected failure
 withdrawal minus 1 -> expected failure

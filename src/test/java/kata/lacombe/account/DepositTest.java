@@ -33,14 +33,14 @@ public class DepositTest {
         assertThat(account.getBalance()).isEqualTo(2);
     }
     @Test
-    void deposit_0() {
+    void deposit_0_should_return_error() {
         Account account = new Account();
 
         assertThatThrownBy(() -> account.deposit(0))
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void deposit_minus_1() {
+    void deposit_minus_1_should_return_error() {
         Account account = new Account();
 
         assertThatThrownBy(() -> account.deposit(-1))
