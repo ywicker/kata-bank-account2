@@ -30,6 +30,7 @@ public class Account {
 
     public void withdrawal(final int value) {
         var amount = Amount.createAmount(value);
+        operationList.add(new Operation());
         balance.subtract(amount);
     }
 

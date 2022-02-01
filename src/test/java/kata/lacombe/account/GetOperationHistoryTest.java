@@ -20,4 +20,12 @@ public class GetOperationHistoryTest {
 
         assertThat(account.getOperationHistory()).hasSize(1);
     }
+    @Test
+    void withdrawing_once_should_make_a_history_with_one_operation() {
+        Account account = new Account(1);
+
+        account.withdrawal(1);
+
+        assertThat(account.getOperationHistory()).hasSize(1);
+    }
 }
