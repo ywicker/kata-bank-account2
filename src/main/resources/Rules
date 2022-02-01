@@ -25,3 +25,14 @@ withdrawal minus 1 -> expected failure
     Account Statement and historic
 -------------------------------------
 
+Adding Operations
+get operation between 2 dates
+get balance between 2 dates
+
+an initialized account should make no history
+depositing once should make a history with one operation
+withdrawing once should make a history with one operation
+depositing and withdrawing once should make a history with two operations
+
+
+
