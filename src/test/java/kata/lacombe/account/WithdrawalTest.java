@@ -61,4 +61,11 @@ public class WithdrawalTest {
         assertThatThrownBy(() -> account.withdrawal(0))
                 .isInstanceOf(AssertionError.class);
     }
+    @Test
+    void withdrawal_minus_1_should_return_error(){
+        Account account = new Account();
+
+        assertThatThrownBy(() -> account.withdrawal(-1))
+                .isInstanceOf(AssertionError.class);
+    }
 }
