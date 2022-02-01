@@ -34,5 +34,6 @@ depositing once should make a history with one operation
 withdrawing once should make a history with one operation
 depositing and withdrawing once should make a history with two operations
 
-
+deposit and withdraw twice should make history sorted by dates
+the last operation should contain the final balance
 
