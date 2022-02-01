@@ -17,6 +17,7 @@ public class Balance {
     }
 
     public void substract(Amount amount) {
+        assert Integer.signum(balanceValue - amount.getValue()) != -1;
         balanceValue -= amount.value();
     }
 
