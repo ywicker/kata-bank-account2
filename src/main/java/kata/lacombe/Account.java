@@ -1,7 +1,11 @@
 package kata.lacombe;
 
+import jdk.dynalink.Operation;
+
+import java.util.List;
+
 public class Account {
-    private Balance balance;
+    private final Balance balance;
 
     public Account() {
         balance = new Balance();
@@ -27,5 +31,9 @@ public class Account {
 
     public int getBalance() {
         return balance.getValue();
+    }
+
+    public List<Operation> getOperationHistory() {
+        return List.of();
     }
 }
