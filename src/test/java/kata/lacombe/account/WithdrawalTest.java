@@ -45,4 +45,13 @@ public class WithdrawalTest {
 
         Assertions.assertThat(account.getBalance()).isEqualTo(-2);
     }
+    @Test
+    void withdrawal_1_twice_with_a_balance_of_2(){
+        Account account = new Account(2);
+
+        account.withdrawal(1);
+        account.withdrawal(1);
+
+        Assertions.assertThat(account.getBalance()).isEqualTo(0);
+    }
 }
