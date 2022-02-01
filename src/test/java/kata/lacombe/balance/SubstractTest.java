@@ -25,4 +25,13 @@ public class SubstractTest {
         assertThatThrownBy(() -> balance.substract(amount))
                 .isInstanceOf(AssertionError.class);
     }
+    @Test
+    void substract_1_without_balance_and_with_allow_overdraft_of_1() {
+        Balance balance = new Balance(0,1);
+
+        Amount amount = new Amount(1);
+        balance.substract(amount);
+
+        Assertions.assertThat(balance.getValue()).isEqualTo(-1);
+    }
 }

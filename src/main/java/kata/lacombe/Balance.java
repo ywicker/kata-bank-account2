@@ -2,6 +2,7 @@ package kata.lacombe;
 
 public class Balance {
     private int balanceValue;
+    private int allowOverdraft;
 
     public Balance() {
     }
@@ -9,7 +10,9 @@ public class Balance {
         this.balanceValue = balanceValue;
     }
 
-    public Balance(final int balance, final int allowOverdraft) {
+    public Balance(final int balanceValue, final int allowOverdraft) {
+        this.balanceValue = balanceValue;
+        this.allowOverdraft = allowOverdraft;
     }
 
     public void add(Amount amount) {
@@ -17,7 +20,7 @@ public class Balance {
     }
 
     public void substract(Amount amount) {
-        assert Integer.signum(balanceValue - amount.getValue()) != -1;
+        assert Integer.signum(balanceValue + allowOverdraft - amount.getValue()) != -1;
         balanceValue -= amount.value();
     }
 
