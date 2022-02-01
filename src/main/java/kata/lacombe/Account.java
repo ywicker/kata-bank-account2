@@ -27,13 +27,13 @@ public class Account {
 
     public void deposit(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation(DEPOSIT));
+        operationList.add(new Operation(DEPOSIT, amount));
         balance.add(amount);
     }
 
     public void withdrawal(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation(WITHDRAWAL));
+        operationList.add(new Operation(WITHDRAWAL, amount));
         balance.subtract(amount);
     }
 

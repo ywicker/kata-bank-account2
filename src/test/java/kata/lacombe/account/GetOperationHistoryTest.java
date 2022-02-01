@@ -1,6 +1,8 @@
 package kata.lacombe.account;
 
 import kata.lacombe.Account;
+import kata.lacombe.Amount;
+import kata.lacombe.Operation;
 import org.junit.jupiter.api.Test;
 
 import static kata.lacombe.OperationType.DEPOSIT;
@@ -45,20 +47,22 @@ public class GetOperationHistoryTest {
 
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
-        var depositOperation = operationHistory.get(0);
 
-        assertThat(operationHistory).hasSize(1);
-        assertThat(depositOperation.type()).isEqualTo(DEPOSIT);
+        var expectedOperation = new Operation(DEPOSIT, Amount.createAmount(1));
+        assertThat(operationHistory)
+                .hasSize(1)
+                .containsExactly(expectedOperation);
     }
     @Test
-    void withdrawing_once_should_make_a_history_with_one_deposit_operation() {
+    void withdrawing_once_should_make_a_history_with_one_withdrawal_operation() {
         Account account = new Account(1);
 
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
-        var depositOperation = operationHistory.get(0);
 
-        assertThat(operationHistory).hasSize(1);
-        assertThat(depositOperation.type()).isEqualTo(WITHDRAWAL);
+        var expectedOperation = new Operation(WITHDRAWAL, Amount.createAmount(1));
+        assertThat(operationHistory)
+                .hasSize(1)
+                .containsExactly(expectedOperation);
     }
 }
