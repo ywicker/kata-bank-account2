@@ -10,7 +10,7 @@ import static kata.lacombe.Amount.*;
 public class AddTest {
     @Test
     void add_1() {
-        Balance balance = new Balance(0);
+        Balance balance = new Balance();
 
         Amount amount = createAmount(1);
         balance.add(amount);
@@ -22,6 +22,16 @@ public class AddTest {
         Balance balance = new Balance(1);
 
         Amount amount = createAmount(1);
+        balance.add(amount);
+
+        Assertions.assertThat(balance.getValue()).isEqualTo(2);
+    }
+    @Test
+    void add_1_twice() {
+        Balance balance = new Balance();
+
+        Amount amount = createAmount(1);
+        balance.add(amount);
         balance.add(amount);
 
         Assertions.assertThat(balance.getValue()).isEqualTo(2);

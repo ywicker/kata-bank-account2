@@ -3,6 +3,8 @@ package kata.lacombe;
 public class Balance {
     private int balanceValue;
 
+    public Balance() {
+    }
     public Balance(final int balanceValue) {
         this.balanceValue = balanceValue;
     }
