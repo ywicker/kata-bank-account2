@@ -2,10 +2,10 @@ package kata.lacombe.balance;
 
 import kata.lacombe.Amount;
 import kata.lacombe.Balance;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static kata.lacombe.Amount.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AddTest {
     @Test
@@ -15,7 +15,7 @@ public class AddTest {
         Amount amount = createAmount(1);
         balance.add(amount);
 
-        Assertions.assertThat(balance.getValue()).isEqualTo(1);
+        assertThat(balance.getValue()).isEqualTo(1);
     }
     @Test
     void add_1_with_balance() {
@@ -24,7 +24,7 @@ public class AddTest {
         Amount amount = createAmount(1);
         balance.add(amount);
 
-        Assertions.assertThat(balance.getValue()).isEqualTo(2);
+        assertThat(balance.getValue()).isEqualTo(2);
     }
     @Test
     void add_1_twice() {
@@ -34,6 +34,6 @@ public class AddTest {
         balance.add(amount);
         balance.add(amount);
 
-        Assertions.assertThat(balance.getValue()).isEqualTo(2);
+        assertThat(balance.getValue()).isEqualTo(2);
     }
 }

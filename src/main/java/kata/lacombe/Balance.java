@@ -17,6 +17,7 @@ public class Balance {
     }
 
     public void substract(Amount amount) {
+        balanceValue -= amount.value();
     }
 
     public int getValue() {
