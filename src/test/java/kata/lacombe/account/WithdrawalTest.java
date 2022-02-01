@@ -37,4 +37,12 @@ public class WithdrawalTest {
         assertThatThrownBy(() -> account.withdrawal(1))
                 .isInstanceOf(AssertionError.class);
     }
+    @Test
+    void withdrawal_1_with_negative_balance_and_with_allow_overdraft_of_2(){
+        Account account = new Account(-1, 2);
+
+        account.withdrawal(1);
+
+        Assertions.assertThat(account.getBalance()).isEqualTo(-2);
+    }
 }
