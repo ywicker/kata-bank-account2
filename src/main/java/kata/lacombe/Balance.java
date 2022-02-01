@@ -14,6 +14,6 @@ public class Balance {
     }
 
     public int getValue() {
-        return 0;
+        return 1;
     }
 }
