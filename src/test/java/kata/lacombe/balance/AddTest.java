@@ -17,4 +17,13 @@ public class AddTest {
 
         Assertions.assertThat(balance.getValue()).isEqualTo(1);
     }
+    @Test
+    void add_1_with_balance() {
+        Balance balance = new Balance(1);
+
+        Amount amount = createAmount(1);
+        balance.add(amount);
+
+        Assertions.assertThat(balance.getValue()).isEqualTo(2);
+    }
 }
