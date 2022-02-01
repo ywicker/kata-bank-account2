@@ -4,6 +4,7 @@ public class Account {
     private Balance balance;
 
     public Account() {
+        balance = new Balance();
     }
 
     public Account(final int balanceValue) {
