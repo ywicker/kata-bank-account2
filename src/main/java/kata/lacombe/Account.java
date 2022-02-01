@@ -22,6 +22,7 @@ public class Account {
     }
 
     public void withdrawal(final int amount) {
+        assert amount > 0;
         assert Integer.signum(balance + allowOverdraft - amount) >= 0;
         balance -= amount;
     }

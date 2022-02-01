@@ -54,4 +54,11 @@ public class WithdrawalTest {
 
         Assertions.assertThat(account.getBalance()).isEqualTo(0);
     }
+    @Test
+    void withdrawal_0_should_return_error(){
+        Account account = new Account();
+
+        assertThatThrownBy(() -> account.withdrawal(0))
+                .isInstanceOf(AssertionError.class);
+    }
 }
