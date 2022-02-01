@@ -6,13 +6,17 @@ public class Account {
     public Account() {
     }
 
-    public Account(int balance) {
+    public Account(final int balance) {
         this.balance = balance;
     }
 
-    public void deposit(int amount) {
-        assert Integer.signum(amount) ==1;
+    public void deposit(final int amount) {
+        assert Integer.signum(amount) == 1;
         balance += amount;
+    }
+
+    public void withdrawal(final int amount) {
+        balance -= amount;
     }
 
     public int getBalance() {
