@@ -28,4 +28,13 @@ public class GetOperationHistoryTest {
 
         assertThat(account.getOperationHistory()).hasSize(1);
     }
+    @Test
+    void depositing_and_withdrawing_once_should_make_a_history_with_two_operations() {
+        Account account = new Account();
+
+        account.deposit(1);
+        account.withdrawal(1);
+
+        assertThat(account.getOperationHistory()).hasSize(2);
+    }
 }
