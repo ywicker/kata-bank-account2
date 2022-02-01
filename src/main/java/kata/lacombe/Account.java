@@ -1,33 +1,31 @@
 package kata.lacombe;
 
 public class Account {
-    private int balance;
-    private int allowOverdraft;
+    private Balance balance;
 
     public Account() {
     }
 
-    public Account(final int balance) {
-        this.balance = balance;
+    public Account(final int balanceValue) {
+        this.balance = new Balance(balanceValue);
     }
 
     public Account(final int balance,final int allowOverdraft) {
-        this.balance = balance;
-        this.allowOverdraft = allowOverdraft;
+        this.balance = new Balance(balance, allowOverdraft);
     }
 
     public void deposit(final int value) {
         Amount amount = Amount.createAmount(value);
-        balance += amount.getValue();
+        balance.add(amount);
     }
 
     public void withdrawal(final int value) {
         Amount amount = Amount.createAmount(value);
-        assert Integer.signum(balance + allowOverdraft - amount.getValue()) >= 0;
-        balance -= amount.getValue();
+        // assert Integer.signum(balance + allowOverdraft - amount.getValue()) >= 0;
+        balance.substract(amount);
     }
 
     public int getBalance() {
-        return balance;
+        return balance.getValue();
     }
 }
