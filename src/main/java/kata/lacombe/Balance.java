@@ -17,6 +17,9 @@ public class Balance {
         this.allowOverdraft = allowOverdraft;
     }
 
+    public void add(int value) {
+        balanceValue += value;
+    }
     public void add(Amount amount) {
         balanceValue += amount.value();
     }
