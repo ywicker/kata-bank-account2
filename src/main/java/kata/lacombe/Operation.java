@@ -1,4 +1,6 @@
 package kata.lacombe;
 
-public record Operation(OperationType type, Amount amount) {
+import java.time.LocalDateTime;
+
+public record Operation(LocalDateTime date, OperationType type, Amount amount) {
 }
