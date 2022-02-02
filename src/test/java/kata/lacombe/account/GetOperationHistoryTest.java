@@ -136,4 +136,32 @@ public class GetOperationHistoryTest {
         assertThatThrownBy(() -> account.withdrawal(1))
                 .isInstanceOf(AssertionError.class);
     }
+    @Test
+    void deposit_and_withdraw_twice_should_make_history_sorted_by_dates() {
+        var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
+        var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
+        var oneFebruaryFourHour = LocalDateTime.of(2022, FEBRUARY, 1, 4, 0);
+        var twoFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 2, 0, 0);
+        when(mockDateProvider.getDate())
+                .thenReturn(oneFebruaryZeroHour)
+                .thenReturn(oneFebruaryTwoHour)
+                .thenReturn(oneFebruaryFourHour)
+                .thenReturn(twoFebruaryZeroHour);
+        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+
+        account.deposit(1);
+        account.deposit(1);
+        account.withdrawal(1);
+        account.deposit(1);
+        var operationHistory = account.getOperationHistory();
+
+        assertThat(operationHistory)
+                .hasSize(4)
+                .containsExactly(
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(1)),
+                        new Operation(oneFebruaryTwoHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
+                        new Operation(oneFebruaryFourHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
+                        new Operation(twoFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2))
+                );
+    }
 }
