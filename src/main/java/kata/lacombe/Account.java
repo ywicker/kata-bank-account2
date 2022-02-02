@@ -1,6 +1,5 @@
 package kata.lacombe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static kata.lacombe.OperationType.DEPOSIT;
@@ -9,37 +8,37 @@ import static kata.lacombe.PositiveAmount.createAmount;
 
 public class Account {
     private final Balance balance;
-    private final List<Operation> operationList;
+    private final Operations operations;
     private final DateProvider dateProvider;
 
     public Account(final DateProvider dateProvider) {
         this.dateProvider = dateProvider;
         balance = new Balance();
-        operationList = new ArrayList<>();
+        operations = new Operations();
     }
 
     public Account(final DateProvider dateProvider, final int balanceValue) {
         this.dateProvider = dateProvider;
         this.balance = new Balance(balanceValue);
-        operationList = new ArrayList<>();
+        operations = new Operations();
     }
 
     public Account(final DateProvider dateProvider, final int balance,final int allowOverdraft) {
         this.dateProvider = dateProvider;
         this.balance = new Balance(balance, allowOverdraft);
-        operationList = new ArrayList<>();
+        operations = new Operations();
     }
 
     public void deposit(final int value) {
         var amount = createAmount(value);
         balance.add(amount);
-        operationList.add(new Operation(dateProvider.getDate(), DEPOSIT, amount, balance));
+        operations.add(new Operation(dateProvider.getDate(), DEPOSIT, amount, balance));
     }
 
     public void withdrawal(final int value) {
         var amount = createAmount(value);
         balance.subtract(amount);
-        operationList.add(new Operation(dateProvider.getDate(), WITHDRAWAL, amount, balance));
+        operations.add(new Operation(dateProvider.getDate(), WITHDRAWAL, amount, balance));
     }
 
     public int getBalance() {
@@ -47,6 +46,6 @@ public class Account {
     }
 
     public List<Operation> getOperationHistory() {
-        return operationList;
+        return operations.getOperationList();
     }
 }
