@@ -7,6 +7,7 @@ import static kata.lacombe.PositiveAmount.createAmount;
 
 public class Operations {
     private final List<Operation> operationList;
+
     private final DateProvider dateProvider;
     private final AccountParameterProvider accountParameterProvider;
 
@@ -20,12 +21,12 @@ public class Operations {
         return List.copyOf(operationList);
     }
 
-    public void add(OperationType type, int value) {
+    public void addOperation(OperationType type, int value) {
         var positiveAmount = createAmount(value);
         int balance = actualBalance();
         int futureBalance = balance + type.amountToApply(positiveAmount);
         var allowOverdraft = accountParameterProvider.getAllowOverdraft();
-        assert balance + type.amountToApply(positiveAmount) >= -allowOverdraft;
+        assert futureBalance >= -allowOverdraft;
         var operation = new Operation(dateProvider.getDate(), type, positiveAmount, new Amount(futureBalance));
         operationList.add(operation);
     }

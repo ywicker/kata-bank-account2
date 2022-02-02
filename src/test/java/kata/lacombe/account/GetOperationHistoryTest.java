@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 import static java.time.Month.FEBRUARY;
 import static kata.lacombe.OperationType.DEPOSIT;
@@ -94,5 +95,27 @@ public class GetOperationHistoryTest {
         assertThat(operationHistory)
                 .hasSize(1)
                 .containsExactly(expectedOperation);
+    }
+    @Test
+    void the_last_operation_should_contain_the_final_balance() {
+        var date = LocalDateTime.of(2022, FEBRUARY, 2, 0, 0);
+        when(mockDateProvider.getDate())
+                .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 0, 0))
+                .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 2, 0))
+                .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 4, 0))
+                .thenReturn(date);
+        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+
+        account.deposit(1);
+        account.deposit(1);
+        account.withdrawal(1);
+        account.deposit(1);
+        var operationHistory = account.getOperationHistory();
+        var lastOperation = operationHistory.stream().max(Comparator.comparing(Operation::date)).get();
+
+        assertThat(operationHistory).hasSize(4);
+        var expectedBalance = new Amount(2);
+        assertThat(lastOperation.balanceAfterOperation()).isEqualTo(expectedBalance);
+        assertThat(account.getBalance()).isEqualTo(2);
     }
 }

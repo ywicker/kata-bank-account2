@@ -13,11 +13,11 @@ public class Account {
     }
 
     public void deposit(final int value) {
-        operations.add(DEPOSIT, value);
+        operations.addOperation(DEPOSIT, value);
     }
 
     public void withdrawal(final int value) {
-        operations.add(WITHDRAWAL, value);
+        operations.addOperation(WITHDRAWAL, value);
     }
 
     public int getBalance() {
