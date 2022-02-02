@@ -10,9 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 
 import static java.time.Month.FEBRUARY;
-import static kata.lacombe.Amount.createAmount;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
+import static kata.lacombe.PositiveAmount.createAmount;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 

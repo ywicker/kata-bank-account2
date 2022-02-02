@@ -5,6 +5,7 @@ import java.util.List;
 
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
+import static kata.lacombe.PositiveAmount.createAmount;
 
 public class Account {
     private final Balance balance;
@@ -30,13 +31,13 @@ public class Account {
     }
 
     public void deposit(final int value) {
-        var amount = Amount.createAmount(value);
+        var amount = createAmount(value);
         balance.add(amount);
         operationList.add(new Operation(dateProvider.getDate(), DEPOSIT, amount, balance));
     }
 
     public void withdrawal(final int value) {
-        var amount = Amount.createAmount(value);
+        var amount = createAmount(value);
         balance.subtract(amount);
         operationList.add(new Operation(dateProvider.getDate(), WITHDRAWAL, amount, balance));
     }
