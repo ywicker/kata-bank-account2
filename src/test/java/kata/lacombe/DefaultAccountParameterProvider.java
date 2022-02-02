@@ -1,13 +1,15 @@
 package kata.lacombe;
 
+import static kata.lacombe.NonNegativeAmount.createNonNegativeAmount;
+
 public class DefaultAccountParameterProvider implements AccountParameterProvider {
     @Override
-    public int getInitialBalance() {
-        return 0;
+    public Amount getInitialBalance() {
+        return new Amount(0);
     }
 
     @Override
-    public int getAllowOverdraft() {
-        return 0;
+    public NonNegativeAmount getAllowOverdraft() {
+        return createNonNegativeAmount(0);
     }
 }

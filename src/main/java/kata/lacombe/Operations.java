@@ -1,9 +1,10 @@
 package kata.lacombe;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import static kata.lacombe.PositiveAmount.createAmount;
+import static kata.lacombe.PositiveAmount.createPositiveAmount;
 
 public class Operations {
     private final List<Operation> operationList;
@@ -22,20 +23,20 @@ public class Operations {
     }
 
     public void addOperation(OperationType type, int value) {
-        var positiveAmount = createAmount(value);
-        int balance = actualBalance();
-        int futureBalance = balance + type.amountToApply(positiveAmount);
+        var positiveAmount = createPositiveAmount(value);
+        var balance = currentBalance();
+        var balanceAfterOperation = balance.add(type.amountToApply(positiveAmount));
         var allowOverdraft = accountParameterProvider.getAllowOverdraft();
-        assert futureBalance >= -allowOverdraft;
-        var operation = new Operation(dateProvider.getDate(), type, positiveAmount, new Amount(futureBalance));
+        assert balanceAfterOperation.isNotLessThan(allowOverdraft.opposite());
+        var operation = new Operation(dateProvider.getDate(), type, positiveAmount, balanceAfterOperation);
         operationList.add(operation);
     }
 
-    public int actualBalance() {
+    public Amount currentBalance() {
         var initialBalance = accountParameterProvider.getInitialBalance();
         var operationsBalance = operationList.stream()
                 .map(operation -> operation.type().amountToApply(operation.operationAmount()))
-                .reduce(0, Integer::sum);
-        return initialBalance + operationsBalance;
+                .reduce(new Amount(0), Amount::add);
+        return initialBalance.add(operationsBalance);
     }
 }

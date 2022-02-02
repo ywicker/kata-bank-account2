@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static kata.lacombe.NonNegativeAmount.createNonNegativeAmount;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
@@ -26,13 +28,13 @@ public class WithdrawalTest {
 
     @Test
     void withdrawal_1_with_a_balance_of_1(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(1);
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(0);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
 
-        Assertions.assertThat(account.getBalance()).isEqualTo(0);
+        assertThat(account.getCurrentBalance()).isEqualTo(0);
     }
     @Test
     void withdrawal_1_without_balance_should_return_error(){
@@ -43,16 +45,18 @@ public class WithdrawalTest {
     }
     @Test
     void withdrawal_1_without_balance_and_with_allow_overdraft_of_1(){
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(1);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(0));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(1));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
 
-        Assertions.assertThat(account.getBalance()).isEqualTo(-1);
+        assertThat(account.getCurrentBalance()).isEqualTo(-1);
     }
     @Test
     void withdrawal_1_with_negative_balance_should_return_error(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(-1);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(1))
@@ -60,23 +64,24 @@ public class WithdrawalTest {
     }
     @Test
     void withdrawal_1_with_negative_balance_and_with_allow_overdraft_of_2(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(-1);
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(2);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(2));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
 
-        Assertions.assertThat(account.getBalance()).isEqualTo(-2);
+        assertThat(account.getCurrentBalance()).isEqualTo(-2);
     }
     @Test
     void withdrawal_1_twice_with_a_balance_of_2(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(2);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(2));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
         account.withdrawal(1);
 
-        Assertions.assertThat(account.getBalance()).isEqualTo(0);
+        assertThat(account.getCurrentBalance()).isEqualTo(0);
     }
     @Test
     void withdrawal_0_should_return_error(){

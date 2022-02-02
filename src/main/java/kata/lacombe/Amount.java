@@ -33,4 +33,13 @@ public class Amount {
                 "value=" + value + ']';
     }
 
+    public Amount add(Amount amount) {
+        return new Amount(value + amount.value);
+    }
+    public boolean isNotLessThan(Amount amount) {
+        return !(this.value < amount.value);
+    }
+    public Amount opposite() {
+        return new Amount(-this.value());
+    }
 }

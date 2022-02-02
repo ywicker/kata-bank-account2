@@ -6,7 +6,7 @@ public class PositiveAmount extends Amount {
         super(value);
     }
 
-    public static PositiveAmount createAmount(final int value) {
+    public static PositiveAmount createPositiveAmount(final int value) {
         assert Integer.signum(value) == 1;
         return new PositiveAmount(value);
     }

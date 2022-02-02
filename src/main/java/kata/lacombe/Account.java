@@ -20,8 +20,8 @@ public class Account {
         operations.addOperation(WITHDRAWAL, value);
     }
 
-    public int getBalance() {
-        return operations.actualBalance();
+    public int getCurrentBalance() {
+        return operations.currentBalance().value();
     }
 
     public List<Operation> getOperationHistory() {

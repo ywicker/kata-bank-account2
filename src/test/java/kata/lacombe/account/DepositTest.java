@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static kata.lacombe.NonNegativeAmount.createNonNegativeAmount;
 import static org.mockito.Mockito.when;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,16 +32,17 @@ public class DepositTest {
 
         account.deposit(1);
 
-        assertThat(account.getBalance()).isEqualTo(1);
+        assertThat(account.getCurrentBalance()).isEqualTo(1);
     }
     @Test
     void deposit_1_with_balance() {
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(1);
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
+        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider,mockAccountParameterProvider);
 
         account.deposit(1);
 
-        assertThat(account.getBalance()).isEqualTo(2);
+        assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
     @Test
     void deposit_1_twice() {
@@ -48,7 +51,7 @@ public class DepositTest {
         account.deposit(1);
         account.deposit(1);
 
-        assertThat(account.getBalance()).isEqualTo(2);
+        assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
     @Test
     void deposit_0_should_return_error() {
