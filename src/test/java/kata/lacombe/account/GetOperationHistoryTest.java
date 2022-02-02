@@ -72,7 +72,7 @@ public class GetOperationHistoryTest {
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Balance(1);
+        var expectedBalance = new Amount(1);
         var expectedOperation = new Operation(date, DEPOSIT, createAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
@@ -89,7 +89,7 @@ public class GetOperationHistoryTest {
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Balance();
+        var expectedBalance = new Amount(0);
         var expectedOperation = new Operation(date, WITHDRAWAL, createAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)

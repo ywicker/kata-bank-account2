@@ -3,10 +3,10 @@ package kata.lacombe;
 
 import java.util.Objects;
 
-public abstract class Amount {
+public class Amount {
     private final int value;
 
-    protected Amount(int value) {
+    public Amount(int value) {
         this.value = value;
     }
 
