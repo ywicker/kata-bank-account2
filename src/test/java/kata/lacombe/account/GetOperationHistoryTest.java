@@ -2,6 +2,7 @@ package kata.lacombe.account;
 
 import kata.lacombe.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
 import static kata.lacombe.PositiveAmount.createPositiveAmount;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -119,5 +121,19 @@ public class GetOperationHistoryTest {
         var expectedBalance = new Amount(2);
         assertThat(lastOperation.balanceAfterOperation()).isEqualTo(expectedBalance);
         assertThat(account.getCurrentBalance()).isEqualTo(2);
+    }
+    @Test
+    void do_an_operation_should_return_error_if_it_is_not_the_last() {
+        var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
+        var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
+        when(mockDateProvider.getDate())
+                .thenReturn(oneFebruaryTwoHour)
+                .thenReturn(oneFebruaryZeroHour);
+        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+
+        account.deposit(1);
+
+        assertThatThrownBy(() -> account.withdrawal(1))
+                .isInstanceOf(AssertionError.class);
     }
 }

@@ -1,5 +1,6 @@
 package kata.lacombe;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +26,14 @@ public class Operations {
         var positiveAmount = createPositiveAmount(value);
         var currentBalance = currentBalance();
         var balanceAfterOperation = currentBalance.add(type.amountToApply(positiveAmount));
+
+        var operationDate = dateProvider.getDate();
         var allowOverdraft = accountParameterProvider.getAllowOverdraft();
 
+        assert isAfterOrEqualsLastOperationDate(operationDate);
         assert balanceAfterOperation.isNotLessThan(allowOverdraft.opposite());
 
-        var operation = new Operation(dateProvider.getDate(), type, positiveAmount, balanceAfterOperation);
+        var operation = new Operation(operationDate, type, positiveAmount, balanceAfterOperation);
         operationList.add(operation);
     }
 
@@ -39,5 +43,14 @@ public class Operations {
                 .map(operation -> operation.type().amountToApply(operation.operationAmount()))
                 .reduce(new Amount(0), Amount::add);
         return initialBalance.add(operationsBalance);
+    }
+
+    private boolean isAfterOrEqualsLastOperationDate(LocalDateTime newOperationDate) {
+        var lastOperationDate = operationList.stream()
+                .map(Operation::date)
+                .max(LocalDateTime::compareTo);
+        return lastOperationDate
+                .map(localDateTime -> !newOperationDate.isBefore(localDateTime))
+                .orElse(true);
     }
 }
