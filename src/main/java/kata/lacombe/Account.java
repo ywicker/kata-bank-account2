@@ -1,6 +1,5 @@
 package kata.lacombe;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,14 +31,14 @@ public class Account {
 
     public void deposit(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation(dateProvider.getDate(), DEPOSIT, amount));
         balance.add(amount);
+        operationList.add(new Operation(dateProvider.getDate(), DEPOSIT, amount, balance));
     }
 
     public void withdrawal(final int value) {
         var amount = Amount.createAmount(value);
-        operationList.add(new Operation(dateProvider.getDate(), WITHDRAWAL, amount));
         balance.subtract(amount);
+        operationList.add(new Operation(dateProvider.getDate(), WITHDRAWAL, amount, balance));
     }
 
     public int getBalance() {

@@ -1,5 +1,7 @@
 package kata.lacombe;
 
+import java.util.Objects;
+
 public class Balance {
     private int balanceValue;
     private int allowOverdraft;
@@ -26,5 +28,18 @@ public class Balance {
 
     public int getValue() {
         return balanceValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Balance balance = (Balance) o;
+        return balanceValue == balance.balanceValue && allowOverdraft == balance.allowOverdraft;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(balanceValue, allowOverdraft);
     }
 }

@@ -1,9 +1,6 @@
 package kata.lacombe.account;
 
-import kata.lacombe.Account;
-import kata.lacombe.Amount;
-import kata.lacombe.DateProvider;
-import kata.lacombe.Operation;
+import kata.lacombe.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 
 import static java.time.Month.FEBRUARY;
+import static kata.lacombe.Amount.createAmount;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +67,8 @@ public class GetOperationHistoryTest {
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedOperation = new Operation(date, DEPOSIT, Amount.createAmount(1));
+        var expectedBalance = new Balance(1);
+        var expectedOperation = new Operation(date, DEPOSIT, createAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
                 .containsExactly(expectedOperation);
@@ -83,7 +82,8 @@ public class GetOperationHistoryTest {
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedOperation = new Operation(date, WITHDRAWAL, Amount.createAmount(1));
+        var expectedBalance = new Balance();
+        var expectedOperation = new Operation(date, WITHDRAWAL, createAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
                 .containsExactly(expectedOperation);
