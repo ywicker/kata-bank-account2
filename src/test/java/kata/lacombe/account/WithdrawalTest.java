@@ -1,6 +1,10 @@
 package kata.lacombe.account;
 
 import kata.lacombe.*;
+import kata.lacombe.errors.AmountValueException;
+import kata.lacombe.errors.AuthorizedOverdraftExceededException;
+import kata.lacombe.providers.AccountParameterProvider;
+import kata.lacombe.providers.DateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +31,7 @@ public class WithdrawalTest {
 
     @Test
     @DisplayName("Withdrawal 1 with a balance of 1")
-    void withdrawal1WithABalanceOf1(){
+    void withdrawal1WithABalanceOf1() throws Exception {
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -38,15 +42,15 @@ public class WithdrawalTest {
     }
     @Test
     @DisplayName("Withdrawal 1 without balance should return error")
-    void withdrawal1WithoutBalanceShouldReturnError(){
+    void withdrawal1WithoutBalanceShouldReturnError() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(1))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AuthorizedOverdraftExceededException.class);
     }
     @Test
     @DisplayName("Withdrawal 1 without balance and with allow overdraft of 1")
-    void withdrawal1WithoutBalanceAndWithAllowOverdraftOf1(){
+    void withdrawal1WithoutBalanceAndWithAllowOverdraftOf1() throws Exception{
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(0));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(-1));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -63,11 +67,11 @@ public class WithdrawalTest {
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(1))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AuthorizedOverdraftExceededException.class);
     }
     @Test
     @DisplayName("Withdrawal 1 with negative balance and with allow overdraft of 2")
-    void withdrawal1WithNegativeBalanceAndWithAllowOverdraftOf2(){
+    void withdrawal1WithNegativeBalanceAndWithAllowOverdraftOf2() throws Exception{
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(-1));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(-2));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -78,7 +82,7 @@ public class WithdrawalTest {
     }
     @Test
     @DisplayName("Withdrawal 1 twice with a balance of 2")
-    void withdrawal1TwiceWithABalanceOf2(){
+    void withdrawal1TwiceWithABalanceOf2() throws Exception{
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(2));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -94,7 +98,7 @@ public class WithdrawalTest {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(0))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AmountValueException.class);
     }
     @Test
     @DisplayName("Withdrawal minus 1 should return error")
@@ -102,6 +106,6 @@ public class WithdrawalTest {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(-1))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AmountValueException.class);
     }
 }

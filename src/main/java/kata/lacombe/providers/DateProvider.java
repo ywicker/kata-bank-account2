@@ -1,4 +1,4 @@
-package kata.lacombe;
+package kata.lacombe.providers;
 
 import java.time.LocalDateTime;
 

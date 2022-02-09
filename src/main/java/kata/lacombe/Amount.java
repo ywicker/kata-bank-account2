@@ -1,5 +1,7 @@
 package kata.lacombe;
 
+import kata.lacombe.errors.AmountValueException;
+
 import java.util.Objects;
 
 public final class Amount {
@@ -9,8 +11,10 @@ public final class Amount {
         this.value = value;
     }
 
-    public static Amount createAmount(int value) {
-        assert Integer.signum(value) == 1;
+    public static Amount createAmount(int value) throws AmountValueException {
+        if(Integer.signum(value) != 1) {
+            throw new AmountValueException();
+        }
         return new Amount(value);
     }
 

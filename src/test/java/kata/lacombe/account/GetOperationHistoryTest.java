@@ -1,6 +1,9 @@
 package kata.lacombe.account;
 
 import kata.lacombe.*;
+import kata.lacombe.errors.OperationDateException;
+import kata.lacombe.providers.AccountParameterProvider;
+import kata.lacombe.providers.DateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +46,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Depositing once should make a history with one operation")
-    void depositingOnceShouldMakeAHistoryWithOneOperation() {
+    void depositingOnceShouldMakeAHistoryWithOneOperation() throws Exception {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -52,7 +55,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Withdrawing once should make a history with one operation")
-    void withdrawingOnceShouldMakeAHistoryWithOneOperation() {
+    void withdrawingOnceShouldMakeAHistoryWithOneOperation() throws Exception {
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -63,7 +66,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Depositing and withdrawing once should make a history with two operations")
-    void depositingAndWithdrawingOnceShouldMakeAHistoryWithTwoOperations() {
+    void depositingAndWithdrawingOnceShouldMakeAHistoryWithTwoOperations() throws Exception {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -73,7 +76,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Depositing once should make a history with one deposit operation")
-    void depositingOnceShouldMakeAHistoryWithOneDepositOperation() {
+    void depositingOnceShouldMakeAHistoryWithOneDepositOperation() throws Exception {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
         Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
@@ -89,7 +92,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Withdrawing once should make a history with one withdrawal operation")
-    void withdrawingOnceShouldMakeAHistoryWithOneWithdrawalOperation() {
+    void withdrawingOnceShouldMakeAHistoryWithOneWithdrawalOperation() throws Exception {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
@@ -107,7 +110,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("The last operation should contain the final balance")
-    void theLastOperationShouldContainTheFinalBalance() {
+    void theLastOperationShouldContainTheFinalBalance() throws Exception {
         var date = LocalDateTime.of(2022, FEBRUARY, 2, 0, 0);
         when(mockDateProvider.getDate())
                 .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 0, 0))
@@ -130,7 +133,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Do an operation should return error if it is not the last")
-    void doAnOperationShouldReturnErrorIfItIsNotTheLast() {
+    void doAnOperationShouldReturnErrorIfItIsNotTheLast() throws Exception {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
         when(mockDateProvider.getDate())
@@ -141,11 +144,11 @@ public class GetOperationHistoryTest {
         account.deposit(1);
 
         assertThatThrownBy(() -> account.withdrawal(1))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(OperationDateException.class);
     }
     @Test
     @DisplayName("Deposit and withdraw several times should make history sorted by dates")
-    void depositAndWithdrawSeveralTimesShouldMakeHistorySortedByDates() {
+    void depositAndWithdrawSeveralTimesShouldMakeHistorySortedByDates() throws Exception {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
         var oneFebruaryFourHour = LocalDateTime.of(2022, FEBRUARY, 1, 4, 0);
@@ -174,7 +177,7 @@ public class GetOperationHistoryTest {
     }
     @Test
     @DisplayName("Deposit and withdraw several times at the same date should make history sorted by order of operation")
-    void depositAndWithdrawTwiceShouldMakeHistorySortedByDates() {
+    void depositAndWithdrawTwiceShouldMakeHistorySortedByDates() throws Exception {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate())
                 .thenReturn(oneFebruaryZeroHour);

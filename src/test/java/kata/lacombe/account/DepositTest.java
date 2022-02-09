@@ -1,6 +1,9 @@
 package kata.lacombe.account;
 
 import kata.lacombe.*;
+import kata.lacombe.errors.AmountValueException;
+import kata.lacombe.providers.AccountParameterProvider;
+import kata.lacombe.providers.DateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +30,7 @@ public class DepositTest {
 
     @Test
     @DisplayName("Deposit 1 without balance")
-    void deposit1WithoutBalance() {
+    void deposit1WithoutBalance() throws Exception {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -36,7 +39,7 @@ public class DepositTest {
     }
     @Test
     @DisplayName("Deposit 1 with balance")
-    void deposit1WithBalance() {
+    void deposit1WithBalance() throws Exception {
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
         when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider,mockAccountParameterProvider);
@@ -47,7 +50,7 @@ public class DepositTest {
     }
     @Test
     @DisplayName("Deposit 1 twice")
-    void deposit1Twice() {
+    void deposit1Twice() throws Exception {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -61,7 +64,7 @@ public class DepositTest {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.deposit(0))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AmountValueException.class);
     }
     @Test
     @DisplayName("Deposit minus 1 should return error")
@@ -69,6 +72,6 @@ public class DepositTest {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.deposit(-1))
-                .isInstanceOf(AssertionError.class);
+                .isInstanceOf(AmountValueException.class);
     }
 }
