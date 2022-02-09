@@ -2,6 +2,7 @@ package kata.lacombe;
 
 import java.util.List;
 
+import static kata.lacombe.Amount.createAmount;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
 
@@ -13,11 +14,11 @@ public class Account {
     }
 
     public void deposit(final int value) {
-        operations.addOperation(DEPOSIT, value);
+        operations.addOperation(DEPOSIT, createAmount(value));
     }
 
     public void withdrawal(final int value) {
-        operations.addOperation(WITHDRAWAL, value);
+        operations.addOperation(WITHDRAWAL, createAmount(value));
     }
 
     public int getCurrentBalance() {

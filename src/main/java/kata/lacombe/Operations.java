@@ -1,11 +1,9 @@
 package kata.lacombe;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static kata.lacombe.PositiveAmount.createPositiveAmount;
 
 public class Operations {
     private final LinkedList<Operation> operationList;
@@ -23,10 +21,9 @@ public class Operations {
         return List.copyOf(operationList);
     }
 
-    public void addOperation(OperationType type, int value) {
-        var positiveAmount = createPositiveAmount(value);
+    public void addOperation(OperationType type, Amount amount) {
         var currentBalance = currentBalance();
-        var balanceAfterOperation = currentBalance.newBalance(type.amountToApply(positiveAmount));
+        var balanceAfterOperation = currentBalance.newBalance(type.amountToApply(amount));
 
         var operationDate = dateProvider.getDate();
         var minimumAuthorizedBalance = accountParameterProvider.getMinimumAuthorizedBalance();
@@ -34,7 +31,7 @@ public class Operations {
         assert isAfterOrEqualsLastOperationDate(operationDate);
         assert balanceAfterOperation.value() >= minimumAuthorizedBalance.value();
 
-        var operation = new Operation(operationDate, type, positiveAmount, balanceAfterOperation);
+        var operation = new Operation(operationDate, type, amount, balanceAfterOperation);
         operationList.add(operation);
     }
 

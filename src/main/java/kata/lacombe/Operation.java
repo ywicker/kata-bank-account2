@@ -2,5 +2,5 @@ package kata.lacombe;
 
 import java.time.LocalDateTime;
 
-public record Operation(LocalDateTime date, OperationType type, PositiveAmount operationAmount, Balance balanceAfterOperation) {
+public record Operation(LocalDateTime date, OperationType type, Amount operationAmount, Balance balanceAfterOperation) {
 }
