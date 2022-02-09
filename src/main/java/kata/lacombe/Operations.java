@@ -46,11 +46,9 @@ public class Operations {
     }
 
     private boolean isAfterOrEqualsLastOperationDate(LocalDateTime newOperationDate) {
-        var lastOperationDate = operationList.stream()
-                .map(Operation::date)
-                .max(LocalDateTime::compareTo);
-        return lastOperationDate
-                .map(localDateTime -> !newOperationDate.isBefore(localDateTime))
-                .orElse(true);
+        if(operationList.isEmpty()) {
+            return true;
+        }
+        return !newOperationDate.isBefore(operationList.peekLast().date());
     }
 }
