@@ -54,8 +54,8 @@ public class GetOperationHistoryTest {
     @Test
     @DisplayName("Withdrawing once should make a history with one operation")
     void withdrawingOnceShouldMakeAHistoryWithOneOperation() {
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
@@ -82,7 +82,7 @@ public class GetOperationHistoryTest {
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Amount(1);
+        var expectedBalance = new Balance(1);
         var expectedOperation = new Operation(date, DEPOSIT, createPositiveAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
@@ -93,14 +93,14 @@ public class GetOperationHistoryTest {
     void withdrawingOnceShouldMakeAHistoryWithOneWithdrawalOperation() {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(mockDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Amount(0);
+        var expectedBalance = new Balance(0);
         var expectedOperation = new Operation(date, WITHDRAWAL, createPositiveAmount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
@@ -125,7 +125,7 @@ public class GetOperationHistoryTest {
         var lastOperation = operationHistory.stream().max(Comparator.comparing(Operation::date)).get();
 
         assertThat(operationHistory).hasSize(4);
-        var expectedBalance = new Amount(2);
+        var expectedBalance = new Balance(2);
         assertThat(lastOperation.balanceAfterOperation()).isEqualTo(expectedBalance);
         assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
@@ -167,10 +167,10 @@ public class GetOperationHistoryTest {
         assertThat(operationHistory)
                 .hasSize(4)
                 .containsExactly(
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(1)),
-                        new Operation(oneFebruaryTwoHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
-                        new Operation(oneFebruaryFourHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
-                        new Operation(twoFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2))
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(1)),
+                        new Operation(oneFebruaryTwoHour, DEPOSIT, createPositiveAmount(1), new Balance(2)),
+                        new Operation(oneFebruaryFourHour, WITHDRAWAL, createPositiveAmount(1), new Balance(1)),
+                        new Operation(twoFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(2))
                 );
     }
     @Test
@@ -193,13 +193,13 @@ public class GetOperationHistoryTest {
         assertThat(operationHistory)
                 .hasSize(7)
                 .containsExactly(
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
-                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
-                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(3))
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Balance(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Balance(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(2)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Balance(3))
                 );
     }
 }

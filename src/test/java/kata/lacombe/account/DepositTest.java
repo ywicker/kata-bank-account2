@@ -39,8 +39,8 @@ public class DepositTest {
     @Test
     @DisplayName("Deposit 1 with balance")
     void deposit1WithBalance() {
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider,mockAccountParameterProvider);
 
         account.deposit(1);

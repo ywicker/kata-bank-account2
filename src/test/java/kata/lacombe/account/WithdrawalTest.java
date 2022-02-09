@@ -30,8 +30,8 @@ public class WithdrawalTest {
     @Test
     @DisplayName("Withdrawal 1 with a balance of 1")
     void withdrawal1WithABalanceOf1(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
@@ -49,8 +49,8 @@ public class WithdrawalTest {
     @Test
     @DisplayName("Withdrawal 1 without balance and with allow overdraft of 1")
     void withdrawal1WithoutBalanceAndWithAllowOverdraftOf1(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(0));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(1));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(0));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(-1));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
@@ -60,8 +60,8 @@ public class WithdrawalTest {
     @Test
     @DisplayName("Withdrawal 1 with negative balance should return error")
     void withdrawal1WithNegativeBalanceShouldReturnError(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(-1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(1))
@@ -70,8 +70,8 @@ public class WithdrawalTest {
     @Test
     @DisplayName("Withdrawal 1 with negative balance and with allow overdraft of 2")
     void withdrawal1WithNegativeBalanceAndWithAllowOverdraftOf2(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(2));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(-1));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(-2));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);
@@ -81,8 +81,8 @@ public class WithdrawalTest {
     @Test
     @DisplayName("Withdrawal 1 twice with a balance of 2")
     void withdrawal1TwiceWithABalanceOf2(){
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(2));
-        when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
+        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(2));
+        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
 
         account.withdrawal(1);

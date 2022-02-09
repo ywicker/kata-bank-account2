@@ -26,19 +26,19 @@ public class Operations {
     public void addOperation(OperationType type, int value) {
         var positiveAmount = createPositiveAmount(value);
         var currentBalance = currentBalance();
-        var balanceAfterOperation = currentBalance.add(type.amountToApply(positiveAmount));
+        var balanceAfterOperation = currentBalance.newBalance(type.amountToApply(positiveAmount));
 
         var operationDate = dateProvider.getDate();
-        var allowOverdraft = accountParameterProvider.getAllowOverdraft();
+        var minimumAuthorizedBalance = accountParameterProvider.getMinimumAuthorizedBalance();
 
         assert isAfterOrEqualsLastOperationDate(operationDate);
-        assert balanceAfterOperation.isNotLessThan(allowOverdraft.opposite());
+        assert balanceAfterOperation.value() >= minimumAuthorizedBalance.value();
 
         var operation = new Operation(operationDate, type, positiveAmount, balanceAfterOperation);
         operationList.add(operation);
     }
 
-    public Amount currentBalance() {
+    public Balance currentBalance() {
         if(operationList.isEmpty()) {
             return accountParameterProvider.getInitialBalance();
         }
