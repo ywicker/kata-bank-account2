@@ -8,7 +8,7 @@ import java.util.List;
 import static kata.lacombe.PositiveAmount.createPositiveAmount;
 
 public class Operations {
-    private final List<Operation> operationList;
+    private final LinkedList<Operation> operationList;
 
     private final DateProvider dateProvider;
     private final AccountParameterProvider accountParameterProvider;
@@ -39,11 +39,10 @@ public class Operations {
     }
 
     public Amount currentBalance() {
-        var initialBalance = accountParameterProvider.getInitialBalance();
-        var operationsBalance = operationList.stream()
-                .map(operation -> operation.type().amountToApply(operation.operationAmount()))
-                .reduce(new Amount(0), Amount::add);
-        return initialBalance.add(operationsBalance);
+        if(operationList.isEmpty()) {
+            return accountParameterProvider.getInitialBalance();
+        }
+        return operationList.peekLast().balanceAfterOperation();
     }
 
     private boolean isAfterOrEqualsLastOperationDate(LocalDateTime newOperationDate) {
