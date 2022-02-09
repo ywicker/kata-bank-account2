@@ -2,7 +2,7 @@ package kata.lacombe.account;
 
 import kata.lacombe.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -36,13 +36,15 @@ public class GetOperationHistoryTest {
     }
 
     @Test
-    void an_initialized_account_should_make_no_history() {
+    @DisplayName("An initialized account should make no history")
+    void anInitializedAccountShouldMakeNoHistory() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThat(account.getOperationHistory()).isEmpty();
     }
     @Test
-    void depositing_once_should_make_a_history_with_one_operation() {
+    @DisplayName("Depositing once should make a history with one operation")
+    void depositingOnceShouldMakeAHistoryWithOneOperation() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -50,7 +52,8 @@ public class GetOperationHistoryTest {
         assertThat(account.getOperationHistory()).hasSize(1);
     }
     @Test
-    void withdrawing_once_should_make_a_history_with_one_operation() {
+    @DisplayName("Withdrawing once should make a history with one operation")
+    void withdrawingOnceShouldMakeAHistoryWithOneOperation() {
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -60,7 +63,8 @@ public class GetOperationHistoryTest {
         assertThat(account.getOperationHistory()).hasSize(1);
     }
     @Test
-    void depositing_and_withdrawing_once_should_make_a_history_with_two_operations() {
+    @DisplayName("Depositing and withdrawing once should make a history with two operations")
+    void depositingAndWithdrawingOnceShouldMakeAHistoryWithTwoOperations() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -69,7 +73,8 @@ public class GetOperationHistoryTest {
         assertThat(account.getOperationHistory()).hasSize(2);
     }
     @Test
-    void depositing_once_should_make_a_history_with_one_deposit_operation() {
+    @DisplayName("Depositing once should make a history with one deposit operation")
+    void depositingOnceShouldMakeAHistoryWithOneDepositOperation() {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
         Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
@@ -84,7 +89,8 @@ public class GetOperationHistoryTest {
                 .containsExactly(expectedOperation);
     }
     @Test
-    void withdrawing_once_should_make_a_history_with_one_withdrawal_operation() {
+    @DisplayName("Withdrawing once should make a history with one withdrawal operation")
+    void withdrawingOnceShouldMakeAHistoryWithOneWithdrawalOperation() {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
@@ -101,7 +107,8 @@ public class GetOperationHistoryTest {
                 .containsExactly(expectedOperation);
     }
     @Test
-    void the_last_operation_should_contain_the_final_balance() {
+    @DisplayName("The last operation should contain the final balance")
+    void theLastOperationShouldContainTheFinalBalance() {
         var date = LocalDateTime.of(2022, FEBRUARY, 2, 0, 0);
         when(mockDateProvider.getDate())
                 .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 0, 0))
@@ -123,7 +130,8 @@ public class GetOperationHistoryTest {
         assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
     @Test
-    void do_an_operation_should_return_error_if_it_is_not_the_last() {
+    @DisplayName("Do an operation should return error if it is not the last")
+    void doAnOperationShouldReturnErrorIfItIsNotTheLast() {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
         when(mockDateProvider.getDate())
@@ -137,7 +145,8 @@ public class GetOperationHistoryTest {
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void deposit_and_withdraw_twice_should_make_history_sorted_by_dates() {
+    @DisplayName("Deposit and withdraw several times should make history sorted by dates")
+    void depositAndWithdrawSeveralTimesShouldMakeHistorySortedByDates() {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         var oneFebruaryTwoHour = LocalDateTime.of(2022, FEBRUARY, 1, 2, 0);
         var oneFebruaryFourHour = LocalDateTime.of(2022, FEBRUARY, 1, 4, 0);
@@ -162,6 +171,35 @@ public class GetOperationHistoryTest {
                         new Operation(oneFebruaryTwoHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
                         new Operation(oneFebruaryFourHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
                         new Operation(twoFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2))
+                );
+    }
+    @Test
+    @DisplayName("Deposit and withdraw several times at the same date should make history sorted by order of operation")
+    void depositAndWithdrawTwiceShouldMakeHistorySortedByDates() {
+        var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
+        when(mockDateProvider.getDate())
+                .thenReturn(oneFebruaryZeroHour);
+        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+
+        account.deposit(1);
+        account.deposit(1);
+        account.withdrawal(1);
+        account.deposit(1);
+        account.withdrawal(1);
+        account.deposit(1);
+        account.deposit(1);
+        var operationHistory = account.getOperationHistory();
+
+        assertThat(operationHistory)
+                .hasSize(7)
+                .containsExactly(
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createPositiveAmount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, createPositiveAmount(1), new Amount(3))
                 );
     }
 }

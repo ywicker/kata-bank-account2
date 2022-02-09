@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="kata-bank-account2" options="--add-modules java.base" />
+      <module name="kata-bank-account2" options="" />
     </option>
   </component>
 </project>

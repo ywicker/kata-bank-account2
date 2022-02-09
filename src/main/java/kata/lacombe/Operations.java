@@ -2,6 +2,7 @@ package kata.lacombe;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static kata.lacombe.PositiveAmount.createPositiveAmount;
@@ -15,7 +16,7 @@ public class Operations {
     public Operations(DateProvider dateProvider, AccountParameterProvider accountParameterProvider) {
         this.dateProvider = dateProvider;
         this.accountParameterProvider = accountParameterProvider;
-        this.operationList = new ArrayList<>();
+        this.operationList = new LinkedList<>();
     }
 
     public List<Operation> getOperationList() {

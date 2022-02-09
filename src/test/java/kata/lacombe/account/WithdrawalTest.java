@@ -3,6 +3,7 @@ package kata.lacombe.account;
 import kata.lacombe.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,7 +28,8 @@ public class WithdrawalTest {
     }
 
     @Test
-    void withdrawal_1_with_a_balance_of_1(){
+    @DisplayName("Withdrawal 1 with a balance of 1")
+    void withdrawal1WithABalanceOf1(){
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -37,14 +39,16 @@ public class WithdrawalTest {
         assertThat(account.getCurrentBalance()).isEqualTo(0);
     }
     @Test
-    void withdrawal_1_without_balance_should_return_error(){
+    @DisplayName("Withdrawal 1 without balance should return error")
+    void withdrawal1WithoutBalanceShouldReturnError(){
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(1))
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void withdrawal_1_without_balance_and_with_allow_overdraft_of_1(){
+    @DisplayName("Withdrawal 1 without balance and with allow overdraft of 1")
+    void withdrawal1WithoutBalanceAndWithAllowOverdraftOf1(){
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(0));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(1));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -54,7 +58,8 @@ public class WithdrawalTest {
         assertThat(account.getCurrentBalance()).isEqualTo(-1);
     }
     @Test
-    void withdrawal_1_with_negative_balance_should_return_error(){
+    @DisplayName("Withdrawal 1 with negative balance should return error")
+    void withdrawal1WithNegativeBalanceShouldReturnError(){
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -63,7 +68,8 @@ public class WithdrawalTest {
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void withdrawal_1_with_negative_balance_and_with_allow_overdraft_of_2(){
+    @DisplayName("Withdrawal 1 with negative balance and with allow overdraft of 2")
+    void withdrawal1WithNegativeBalanceAndWithAllowOverdraftOf2(){
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(-1));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(2));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -73,7 +79,8 @@ public class WithdrawalTest {
         assertThat(account.getCurrentBalance()).isEqualTo(-2);
     }
     @Test
-    void withdrawal_1_twice_with_a_balance_of_2(){
+    @DisplayName("Withdrawal 1 twice with a balance of 2")
+    void withdrawal1TwiceWithABalanceOf2(){
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(2));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
@@ -84,14 +91,16 @@ public class WithdrawalTest {
         assertThat(account.getCurrentBalance()).isEqualTo(0);
     }
     @Test
-    void withdrawal_0_should_return_error(){
+    @DisplayName("Withdrawal 0 should return error")
+    void withdrawal0ShouldReturnError(){
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(0))
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void withdrawal_minus_1_should_return_error(){
+    @DisplayName("Withdrawal minus 1 should return error")
+    void withdrawalMinus1ShouldReturnError(){
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.withdrawal(-1))

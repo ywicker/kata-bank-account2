@@ -2,6 +2,7 @@ package kata.lacombe.account;
 
 import kata.lacombe.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,7 +28,8 @@ public class DepositTest {
     }
 
     @Test
-    void deposit_1_without_balance() {
+    @DisplayName("Deposit 1 without balance")
+    void deposit1WithoutBalance() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -35,7 +37,8 @@ public class DepositTest {
         assertThat(account.getCurrentBalance()).isEqualTo(1);
     }
     @Test
-    void deposit_1_with_balance() {
+    @DisplayName("Deposit 1 with balance")
+    void deposit1WithBalance() {
         when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Amount(1));
         when(mockAccountParameterProvider.getAllowOverdraft()).thenReturn(createNonNegativeAmount(0));
         Account account = new Account(defaultDateProvider,mockAccountParameterProvider);
@@ -45,7 +48,8 @@ public class DepositTest {
         assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
     @Test
-    void deposit_1_twice() {
+    @DisplayName("Deposit 1 twice")
+    void deposit1Twice() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         account.deposit(1);
@@ -54,14 +58,16 @@ public class DepositTest {
         assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
     @Test
-    void deposit_0_should_return_error() {
+    @DisplayName("Deposit 0 should return error")
+    void deposit0ShouldReturnError() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.deposit(0))
                 .isInstanceOf(AssertionError.class);
     }
     @Test
-    void deposit_minus_1_should_return_error() {
+    @DisplayName("Deposit minus 1 should return error")
+    void depositMinus1ShouldReturnError() {
         Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
 
         assertThatThrownBy(() -> account.deposit(-1))
