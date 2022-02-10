@@ -30,11 +30,11 @@ public class Account {
     }
 
     public void deposit(final int value) throws Exception {
-        addOperation(DEPOSIT, createAmount(value));
+        applyOperation(DEPOSIT, createAmount(value));
     }
 
     public void withdrawal(final int value) throws Exception {
-        addOperation(WITHDRAWAL, createAmount(value));
+        applyOperation(WITHDRAWAL, createAmount(value));
     }
 
     public int getCurrentBalance() {
@@ -45,8 +45,8 @@ public class Account {
         return operations.getOperationList();
     }
 
-    private void addOperation(@NotNull OperationType type,
-                              Amount amount) throws AuthorizedOverdraftExceededException, OperationDateException {
+    private void applyOperation(@NotNull OperationType type, Amount amount)
+            throws AuthorizedOverdraftExceededException, OperationDateException {
         var operationDate = dateProvider.getDate();
         var balanceAfterOperation = currentBalance().newBalance(type.amountToApply(amount));
 
