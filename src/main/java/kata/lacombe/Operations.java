@@ -2,7 +2,6 @@ package kata.lacombe;
 
 import kata.lacombe.errors.AuthorizedOverdraftExceededException;
 import kata.lacombe.errors.OperationDateException;
-import kata.lacombe.providers.AccountParameterProvider;
 import kata.lacombe.providers.DateProvider;
 
 import java.time.LocalDateTime;
@@ -14,11 +13,11 @@ public class Operations {
     private final LinkedList<Operation> operationList;
 
     private final DateProvider dateProvider;
-    private final AccountParameterProvider accountParameterProvider;
+    private final AccountParameters accountParameters;
 
-    public Operations(DateProvider dateProvider, AccountParameterProvider accountParameterProvider) {
+    public Operations(DateProvider dateProvider, AccountParameters accountParameters) {
         this.dateProvider = dateProvider;
-        this.accountParameterProvider = accountParameterProvider;
+        this.accountParameters = accountParameters;
         this.operationList = new LinkedList<>();
     }
 
@@ -39,7 +38,7 @@ public class Operations {
 
     public Balance currentBalance() {
         if(operationList.isEmpty()) {
-            return accountParameterProvider.getInitialBalance();
+            return accountParameters.initialBalance();
         }
         return operationList.peekLast().balanceAfterOperation();
     }
@@ -59,7 +58,7 @@ public class Operations {
     }
 
     private void balanceCannotBeLowerThanMinimumAuthorizedBalance(Balance newBalance) throws AuthorizedOverdraftExceededException {
-        var minimumAuthorizedBalance = accountParameterProvider.getMinimumAuthorizedBalance();
+        var minimumAuthorizedBalance = accountParameters.minimumAuthorizedBalance();
         if (newBalance.value() < minimumAuthorizedBalance.value()) {
             throw new AuthorizedOverdraftExceededException();
         }

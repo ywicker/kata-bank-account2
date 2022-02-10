@@ -2,7 +2,6 @@ package kata.lacombe.account;
 
 import kata.lacombe.*;
 import kata.lacombe.errors.OperationDateException;
-import kata.lacombe.providers.AccountParameterProvider;
 import kata.lacombe.providers.DateProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 
 import static java.time.Month.FEBRUARY;
+import static kata.lacombe.AccountParameters.createAccountParameters;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
 import static kata.lacombe.Amount.createAmount;
@@ -25,29 +25,25 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class GetOperationHistoryTest {
     DateProvider defaultDateProvider;
-    AccountParameterProvider defaultAccountParameterProvider;
     @Mock
     DateProvider mockDateProvider;
-    @Mock
-    AccountParameterProvider mockAccountParameterProvider;
 
     @BeforeEach
     void setup() {
         defaultDateProvider = new DefaultDateProvider();
-        defaultAccountParameterProvider = new DefaultAccountParameterProvider();
     }
 
     @Test
     @DisplayName("An initialized account should make no history")
     void anInitializedAccountShouldMakeNoHistory() {
-        Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(defaultDateProvider);
 
         assertThat(account.getOperationHistory()).isEmpty();
     }
     @Test
     @DisplayName("Depositing once should make a history with one operation")
     void depositingOnceShouldMakeAHistoryWithOneOperation() throws Exception {
-        Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(defaultDateProvider);
 
         account.deposit(1);
 
@@ -56,9 +52,8 @@ public class GetOperationHistoryTest {
     @Test
     @DisplayName("Withdrawing once should make a history with one operation")
     void withdrawingOnceShouldMakeAHistoryWithOneOperation() throws Exception {
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
-        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
-        Account account = new Account(defaultDateProvider, mockAccountParameterProvider);
+        var accountParameters = createAccountParameters(1, 0);
+        Account account = new Account(defaultDateProvider, accountParameters);
 
         account.withdrawal(1);
 
@@ -67,7 +62,7 @@ public class GetOperationHistoryTest {
     @Test
     @DisplayName("Depositing and withdrawing once should make a history with two operations")
     void depositingAndWithdrawingOnceShouldMakeAHistoryWithTwoOperations() throws Exception {
-        Account account = new Account(defaultDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(defaultDateProvider);
 
         account.deposit(1);
         account.withdrawal(1);
@@ -79,7 +74,7 @@ public class GetOperationHistoryTest {
     void depositingOnceShouldMakeAHistoryWithOneDepositOperation() throws Exception {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
-        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(mockDateProvider);
 
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
@@ -95,9 +90,8 @@ public class GetOperationHistoryTest {
     void withdrawingOnceShouldMakeAHistoryWithOneWithdrawalOperation() throws Exception {
         var date = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate()).thenReturn(date);
-        when(mockAccountParameterProvider.getInitialBalance()).thenReturn(new Balance(1));
-        when(mockAccountParameterProvider.getMinimumAuthorizedBalance()).thenReturn(new Balance(0));
-        Account account = new Account(mockDateProvider, mockAccountParameterProvider);
+        var accountParameters = createAccountParameters(1, 0);
+        Account account = new Account(mockDateProvider, accountParameters);
 
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
@@ -117,7 +111,7 @@ public class GetOperationHistoryTest {
                 .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 2, 0))
                 .thenReturn(LocalDateTime.of(2022, FEBRUARY, 1, 4, 0))
                 .thenReturn(date);
-        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(mockDateProvider);
 
         account.deposit(1);
         account.deposit(1);
@@ -139,7 +133,7 @@ public class GetOperationHistoryTest {
         when(mockDateProvider.getDate())
                 .thenReturn(oneFebruaryTwoHour)
                 .thenReturn(oneFebruaryZeroHour);
-        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(mockDateProvider);
 
         account.deposit(1);
 
@@ -158,7 +152,7 @@ public class GetOperationHistoryTest {
                 .thenReturn(oneFebruaryTwoHour)
                 .thenReturn(oneFebruaryFourHour)
                 .thenReturn(twoFebruaryZeroHour);
-        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(mockDateProvider);
 
         account.deposit(1);
         account.deposit(1);
@@ -181,7 +175,7 @@ public class GetOperationHistoryTest {
         var oneFebruaryZeroHour = LocalDateTime.of(2022, FEBRUARY, 1, 0, 0);
         when(mockDateProvider.getDate())
                 .thenReturn(oneFebruaryZeroHour);
-        Account account = new Account(mockDateProvider, defaultAccountParameterProvider);
+        Account account = new Account(mockDateProvider);
 
         account.deposit(1);
         account.deposit(1);
