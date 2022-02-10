@@ -1,9 +1,9 @@
 package kata.lacombe;
 
-public record AccountParameters(Balance initialBalance, Balance minimumAuthorizedBalance) {
+public record AccountParameters(Amount initialBalance, Amount minimumAuthorizedBalance) {
     public static AccountParameters createAccountParameters(int initialBalanceValue, int minimumAuthorizedBalanceValue) {
-        var initialBalance = new Balance(initialBalanceValue);
-        var minimumAuthorizedBalance = new Balance(minimumAuthorizedBalanceValue);
+        var initialBalance = new Amount(initialBalanceValue);
+        var minimumAuthorizedBalance = new Amount(minimumAuthorizedBalanceValue);
         return new AccountParameters(initialBalance, minimumAuthorizedBalance);
     }
 }

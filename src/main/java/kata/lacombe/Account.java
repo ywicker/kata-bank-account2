@@ -1,5 +1,6 @@
 package kata.lacombe;
 
+import kata.lacombe.errors.AmountValueException;
 import kata.lacombe.errors.AuthorizedOverdraftExceededException;
 import kata.lacombe.errors.OperationDateException;
 import kata.lacombe.providers.DateProvider;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static kata.lacombe.AccountParameters.createAccountParameters;
-import static kata.lacombe.Amount.createAmount;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
 
@@ -30,11 +30,11 @@ public class Account {
     }
 
     public void deposit(final int value) throws Exception {
-        applyOperation(DEPOSIT, createAmount(value));
+        applyOperation(DEPOSIT, new Amount(value));
     }
 
     public void withdrawal(final int value) throws Exception {
-        applyOperation(WITHDRAWAL, createAmount(value));
+        applyOperation(WITHDRAWAL, new Amount(value));
     }
 
     public int getCurrentBalance() {
@@ -46,11 +46,14 @@ public class Account {
     }
 
     private void applyOperation(@NotNull OperationType type, Amount amount)
-            throws AuthorizedOverdraftExceededException, OperationDateException {
-        var operationDate = dateProvider.getDate();
-        var balanceAfterOperation = currentBalance().newBalance(type.amountToApply(amount));
+            throws AuthorizedOverdraftExceededException, OperationDateException, AmountValueException {
 
+        amountValueCannotBeNullOrNegative(amount);
+
+        var operationDate = dateProvider.getDate();
         operationDateCannotBeOlderThanLastOperationDate(operationDate);
+
+        var balanceAfterOperation = currentBalance().add(type.amountToApply(amount));
         balanceCannotBeLowerThanMinimumAuthorizedBalance(balanceAfterOperation);
 
         var operation = new Operation(operationDate,
@@ -60,7 +63,7 @@ public class Account {
         operations.addOperation(operation);
     }
 
-    private Balance currentBalance() {
+    private Amount currentBalance() {
         return operations.lastOperation().map(Operation::balanceAfterOperation)
                 .orElseGet(accountParameters::initialBalance);
     }
@@ -71,10 +74,15 @@ public class Account {
             throw new OperationDateException();
         }
     }
-    private void balanceCannotBeLowerThanMinimumAuthorizedBalance(@NotNull Balance newBalance) throws AuthorizedOverdraftExceededException {
+    private void balanceCannotBeLowerThanMinimumAuthorizedBalance(@NotNull Amount newBalance) throws AuthorizedOverdraftExceededException {
         var minimumAuthorizedBalance = accountParameters.minimumAuthorizedBalance();
         if (newBalance.value() < minimumAuthorizedBalance.value()) {
             throw new AuthorizedOverdraftExceededException();
+        }
+    }
+    private void amountValueCannotBeNullOrNegative(@NotNull Amount amount) throws AmountValueException {
+        if(Integer.signum(amount.value()) != 1) {
+            throw new AmountValueException();
         }
     }
 }

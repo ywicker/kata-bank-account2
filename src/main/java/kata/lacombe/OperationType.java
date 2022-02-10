@@ -2,17 +2,17 @@ package kata.lacombe;
 
 public enum OperationType {
     DEPOSIT {
-        public int amountToApply(final Amount amount) {
-            return amount.value();
+        public Amount amountToApply(final Amount amount) {
+            return amount;
         }
     },
     WITHDRAWAL {
-        public int amountToApply(final Amount amount) {
-            return -amount.value();
+        public Amount amountToApply(final Amount amount) {
+            return amount.opposite();
         }
     };
 
-    public int amountToApply(final Amount amount) {
-        return amount.value();
+    public Amount amountToApply(final Amount amount) {
+        return amount;
     }
 }

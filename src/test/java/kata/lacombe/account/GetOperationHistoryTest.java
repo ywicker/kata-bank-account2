@@ -17,7 +17,6 @@ import static java.time.Month.FEBRUARY;
 import static kata.lacombe.AccountParameters.createAccountParameters;
 import static kata.lacombe.OperationType.DEPOSIT;
 import static kata.lacombe.OperationType.WITHDRAWAL;
-import static kata.lacombe.Amount.createAmount;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -79,8 +78,8 @@ public class GetOperationHistoryTest {
         account.deposit(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Balance(1);
-        var expectedOperation = new Operation(date, DEPOSIT, createAmount(1), expectedBalance);
+        var expectedBalance = new Amount(1);
+        var expectedOperation = new Operation(date, DEPOSIT, new Amount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
                 .containsExactly(expectedOperation);
@@ -96,8 +95,8 @@ public class GetOperationHistoryTest {
         account.withdrawal(1);
         var operationHistory = account.getOperationHistory();
 
-        var expectedBalance = new Balance(0);
-        var expectedOperation = new Operation(date, WITHDRAWAL, createAmount(1), expectedBalance);
+        var expectedBalance = new Amount(0);
+        var expectedOperation = new Operation(date, WITHDRAWAL, new Amount(1), expectedBalance);
         assertThat(operationHistory)
                 .hasSize(1)
                 .containsExactly(expectedOperation);
@@ -121,7 +120,7 @@ public class GetOperationHistoryTest {
         var lastOperation = operationHistory.stream().max(Comparator.comparing(Operation::date)).get();
 
         assertThat(operationHistory).hasSize(4);
-        var expectedBalance = new Balance(2);
+        var expectedBalance = new Amount(2);
         assertThat(lastOperation.balanceAfterOperation()).isEqualTo(expectedBalance);
         assertThat(account.getCurrentBalance()).isEqualTo(2);
     }
@@ -163,10 +162,10 @@ public class GetOperationHistoryTest {
         assertThat(operationHistory)
                 .hasSize(4)
                 .containsExactly(
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(1)),
-                        new Operation(oneFebruaryTwoHour, DEPOSIT, createAmount(1), new Balance(2)),
-                        new Operation(oneFebruaryFourHour, WITHDRAWAL, createAmount(1), new Balance(1)),
-                        new Operation(twoFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(2))
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(1)),
+                        new Operation(oneFebruaryTwoHour, DEPOSIT, new Amount(1), new Amount(2)),
+                        new Operation(oneFebruaryFourHour, WITHDRAWAL, new Amount(1), new Amount(1)),
+                        new Operation(twoFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(2))
                 );
     }
     @Test
@@ -189,13 +188,13 @@ public class GetOperationHistoryTest {
         assertThat(operationHistory)
                 .hasSize(7)
                 .containsExactly(
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(2)),
-                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createAmount(1), new Balance(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(2)),
-                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, createAmount(1), new Balance(1)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(2)),
-                        new Operation(oneFebruaryZeroHour, DEPOSIT, createAmount(1), new Balance(3))
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, new Amount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, WITHDRAWAL, new Amount(1), new Amount(1)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(2)),
+                        new Operation(oneFebruaryZeroHour, DEPOSIT, new Amount(1), new Amount(3))
                 );
     }
 }
