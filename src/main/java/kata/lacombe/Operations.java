@@ -1,5 +1,8 @@
 package kata.lacombe;
 
+import kata.lacombe.errors.OperationDateException;
+import org.jetbrains.annotations.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,12 +26,21 @@ public class Operations {
         }
         return Optional.of(operationList.peekLast().copy());
     }
-    public LocalDateTime lastOperationDate() {
+    private LocalDateTime lastOperationDate() {
         return lastOperation().map(Operation::date)
                 .orElse(LocalDateTime.MIN);
     }
 
-    public void addOperation(Operation operation) {
+    public void addOperation(Operation operation) throws OperationDateException {
+        operationDateCannotBeOlderThanLastOperationDate(operation.date());
+
         operationList.add(operation);
+    }
+
+    private void operationDateCannotBeOlderThanLastOperationDate(@NotNull LocalDateTime operationDate) throws OperationDateException {
+        var lastOperationDate = lastOperationDate();
+        if (operationDate.isBefore(lastOperationDate)) {
+            throw new OperationDateException();
+        }
     }
 }

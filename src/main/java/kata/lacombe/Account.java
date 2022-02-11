@@ -51,7 +51,6 @@ public class Account {
         amountValueCannotBeNullOrNegative(amount);
 
         var operationDate = dateProvider.getDate();
-        operationDateCannotBeOlderThanLastOperationDate(operationDate);
 
         var balanceAfterOperation = currentBalance().add(type.amountToApply(amount));
         balanceCannotBeLowerThanMinimumAuthorizedBalance(balanceAfterOperation);
@@ -68,12 +67,6 @@ public class Account {
                 .orElseGet(accountParameters::initialBalance);
     }
 
-    private void operationDateCannotBeOlderThanLastOperationDate(@NotNull LocalDateTime operationDate) throws OperationDateException {
-        var lastOperationDate = operations.lastOperationDate();
-        if (operationDate.isBefore(lastOperationDate)) {
-            throw new OperationDateException();
-        }
-    }
     private void balanceCannotBeLowerThanMinimumAuthorizedBalance(@NotNull Amount newBalance) throws AuthorizedOverdraftExceededException {
         var minimumAuthorizedBalance = accountParameters.minimumAuthorizedBalance();
         if (newBalance.value() < minimumAuthorizedBalance.value()) {
